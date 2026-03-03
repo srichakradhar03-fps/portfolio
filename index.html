@@ -806,7 +806,9 @@
         <div class="about-badge-num">10+</div>
         <div class="about-badge-label">Projects Done</div>
       </div>
-      <div class="about-img-wrap"></div>
+      <div class="about-img-wrap" style="background: none;">
+        <img src="photo.png" alt="S Sri Chakradhar" style="width:100%;height:100%;object-fit:cover;display:block;" />
+      </div>
       <div class="about-img-frame"></div>
     </div>
   </section>
@@ -820,10 +822,11 @@
         <p class="contact-sub reveal">Have a project in mind? Let's talk about it. I'm always open to exciting new collaborations.</p>
 
         <div class="contact-links reveal">
-          <a href="/cdn-cgi/l/email-protection#7605041f151e171d0417121e1704464536111b171f1a5815191b" class="contact-link">
+          <a href="#" class="contact-link" id="emailLink">
             <div>
               <div class="contact-link-type">Email</div>
-              <div><span class="__cf_email__" data-cfemail="a0d3d2c9c3c8c1cbd2c1c4c8c1d29093e0c7cdc1c9cc8ec3cfcd">[email&#160;protected]</span></div>
+              <div id="emailText"><span class="__cf_email__" data-cfemail="b1c2c3d8d2d9d0dac3d0d5d9d0c38182f1d6dcd0d8dd9fd2dedc">[email&#160;protected]</span></div>
+            </div>
             </div>
             <span class="contact-link-arrow">↗</span>
           </a>
@@ -881,7 +884,7 @@
     <p>Video Editor & Motion Graphics</p>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Custom cursor
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
@@ -920,15 +923,13 @@
 
     revealEls.forEach(el => observer.observe(el));
 
+    // Set email link dynamically to avoid Cloudflare encoding
+    const u = 'srichakradhar03';
+    const d = 'gmail.com';
+    const emailLink = document.getElementById('emailLink');
+    if (emailLink) emailLink.href = 'mailto:' + u + '@' + d;
+
     // Iframe overlay — click to play, keeps cursor alive outside video
     document.querySelectorAll('.iframe-overlay').forEach(overlay => {
       overlay.addEventListener('click', () => {
-        overlay.classList.add('hidden');
-        overlay.closest('.reel-player').addEventListener('mouseleave', () => {
-          overlay.classList.remove('hidden');
-        }, { once: true });
-      });
-    });
-  </script>
-</body>
-</html>
+        overlay.classList.add('h
