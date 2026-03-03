@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Video Editor & Motion Graphics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #080808;
+      --deep: #0d0d0d;
+      --surface: #141414;
+      --border: rgba(255,255,255,0.07);
+      --white: #f0ece4;
+      --dim: rgba(240,236,228,0.45);
+      --accent: #e8c96d;
+      --accent2: #c44b2b;
+      --red: #c44b2b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      cursor: none;
+      overflow-x: hidden;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease, opacity 0.2s;
+      transform: translate(-50%, -50%);
+    }
+    .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(232,201,109,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.35s ease, width 0.3s, height 0.3s, border-color 0.3s;
+    }
+    .cursor-ring.hover {
+      width: 56px; height: 56px;
+      border-color: var(--accent);
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9000;
+      opacity: 0.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 28px 52px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 52px 72px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(196,75,43,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(232,201,109,0.06) 0%, transparent 60%),
+        linear-gradient(160deg, #0d0d0d 0%, #080808 100%);
+    }
+
+    .hero-frame {
+      position: absolute;
+      inset: 32px;
+      border: 1px solid var(--border);
+      pointer-events: none;
+    }
+    .hero-frame::before, .hero-frame::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+    }
+    .hero-frame::before {
+      top: -1px; left: -1px;
+      border-top: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+    }
+    .hero-frame::after {
+      bottom: -1px; right: -1px;
+      border-bottom: 2px solid var(--accent);
+      border-right: 2px solid var(--accent);
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s ease forwards;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 13vw, 13rem);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s ease forwards;
+    }
+    .hero-title .line2 {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(240,236,228,0.25);
+      padding-left: 0.15em;
+    }
+
+    .hero-sub {
+      margin-top: 32px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.75s ease forwards;
+    }
+    .hero-sub p {
+      font-size: 0.95rem;
+      color: var(--dim);
+      max-width: 320px;
+      line-height: 1.7;
+    }
+    .hero-divider {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+    }
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 4px;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      right: 52px;
+      bottom: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: fadeIn 1s 1.2s ease forwards;
+    }
+    .scroll-indicator span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      writing-mode: vertical-lr;
+    }
+    .scroll-line {
+      width: 1px;
+      height: 64px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* SHOWREEL SECTION */
+    .showreel {
+      padding: 120px 52px;
+      position: relative;
+    }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--accent);
+    }
+    .showreel-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      letter-spacing: 0.04em;
+      margin-bottom: 52px;
+      line-height: 1;
+    }
+
+    .reel-player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: none;
+    }
+
+    .reel-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0f0f0f 0%, #1a1410 50%, #0f0a0a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Cinematic bars */
+    .reel-placeholder::before,
+    .reel-placeholder::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 12%;
+      background: #000;
+      z-index: 2;
+    }
+    .reel-placeholder::before { top: 0; }
+    .reel-placeholder::after { bottom: 0; }
+
+    .reel-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .reel-center {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .play-btn {
+      width: 80px; height: 80px;
+      border: 1.5px solid rgba(232,201,109,0.6);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, border-color 0.3s;
+      position: relative;
+    }
+    .play-btn::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 1px solid rgba(232,201,109,0.15);
+      animation: ripple 2.5s ease infinite;
+    }
+    .play-btn:hover { transform: scale(1.08); border-color: var(--accent); }
+    .play-btn svg { margin-left: 5px; }
+
+    .reel-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    .reel-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: absolute;
+      bottom: 14%;
+      left: 40px;
+      z-index: 3;
+    }
+    .reel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .reel-info span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* VIDEO EMBED (when user adds a real URL) */
+    .reel-player iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .reel-player .iframe-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      cursor: none;
+    }
+    .reel-player .iframe-overlay.hidden {
+      display: none;
+    }
+
+    /* ABOUT */
+    .about {
+      padding: 120px 52px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      position: relative;
+    }
+    .about::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 52px; right: 52px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .about-left {}
+    .about-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(232,201,109,0.12);
+      position: absolute;
+      top: 80px;
+      left: 30px;
+      pointer-events: none;
+    }
+    .about-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      margin-bottom: 32px;
+    }
+    .about-title em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .about-body {
+      font-size: 0.98rem;
+      line-height: 1.9;
+      color: var(--dim);
+      margin-bottom: 24px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .skill-tag {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .skill-tag::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+    .skill-tag:hover {
+      border-color: rgba(232,201,109,0.3);
+      color: var(--white);
+      background: rgba(232,201,109,0.04);
+    }
+
+    .about-right {
+      position: relative;
+    }
+
+    .about-img-wrap {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .about-img-wrap::after {
+      content: 'YOUR\nPHOTO\nHERE';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.05);
+      white-space: pre;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .about-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(196,75,43,0.08), rgba(232,201,109,0.05));
+    }
+    .about-img-frame {
+      position: absolute;
+      bottom: -16px; right: -16px;
+      width: 70%;
+      height: 70%;
+      border: 1px solid rgba(232,201,109,0.12);
+      pointer-events: none;
+    }
+
+    .about-badge {
+      position: absolute;
+      top: 28px; left: -28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 16px 20px;
+    }
+    .about-badge-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .about-badge-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 2px;
+    }
+
+    /* CONTACT */
+    .contact {
+      padding: 120px 52px 80px;
+      position: relative;
+    }
+    .contact::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 52px; right: 52px;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      letter-spacing: 0.04em;
+      line-height: 0.92;
+      margin-bottom: 32px;
+    }
+    .contact-heading span { color: var(--accent); }
+
+    .contact-sub {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--dim);
+      max-width: 380px;
+    }
+
+    .contact-links {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      transition: padding-left 0.3s ease, color 0.3s;
+      group: true;
+    }
+    .contact-link:hover { padding-left: 8px; color: var(--accent); }
+    .contact-link-arrow {
+      font-size: 1.1rem;
+      opacity: 0.4;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .contact-link:hover .contact-link-arrow { opacity: 1; transform: translate(4px, -4px); }
+    .contact-link-type {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+
+    .contact-form-side {}
+    .form-field {
+      margin-bottom: 20px;
+    }
+    .form-field label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 10px;
+    }
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 300;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.3s;
+      resize: none;
+      cursor: none;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: rgba(232,201,109,0.4); }
+    .form-field textarea { height: 120px; }
+
+    .submit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 36px;
+      background: var(--accent);
+      color: #080808;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      border: none;
+      cursor: none;
+      transition: background 0.3s, gap 0.3s;
+      font-weight: 700;
+    }
+    .submit-btn:hover { background: #f0d97a; gap: 20px; }
+    .submit-btn svg { width: 14px; }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer .foot-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+    footer .foot-logo span { color: var(--accent); }
+    footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      color: rgba(240,236,228,0.2);
+      text-transform: uppercase;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+    @keyframes ripple {
+      0% { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.7); opacity: 0; }
+    }
+
+    /* Reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 24px 28px; }
+      .hero { padding: 0 28px 56px; }
+      .hero-frame { inset: 16px; }
+      .showreel, .about, .contact { padding: 80px 28px; }
+      .about { grid-template-columns: 1fr; gap: 48px; }
+      .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+      footer { padding: 24px 28px; flex-direction: column; gap: 12px; text-align: center; }
+      .scroll-indicator { display: none; }
+      .about-number { display: none; }
+      .about-badge { left: 0; top: -24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">SRI<span>.</span>CHAKRADHAR</div>
+    <div class="nav-links">
+      <a href="#showreel">Reel</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-frame"></div>
+
+    <div class="hero-tag">Open for Work</div>
+
+    <h1 class="hero-title">
+      FRAME<br>
+      <span class="line2">PERFECT</span>
+    </h1>
+
+    <div class="hero-sub">
+      <p>Video editor & motion graphics artist crafting stories that move — one frame at a time.</p>
+      <div class="hero-divider"></div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">Fresher</div>
+          <div class="hero-stat-label">Experience</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Projects</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- SHOWREEL -->
+  <section class="showreel" id="showreel">
+    <div class="section-label reveal">Showreel</div>
+    <h2 class="showreel-title reveal">THE REEL</h2>
+
+    <div class="reel-player reveal">
+      <iframe src="https://www.youtube.com/embed/dp7TsixhKaE" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+      <div class="iframe-overlay" data-player="1"></div>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <div class="section-label reveal" style="margin-bottom: 16px;">Showreel 02</div>
+      <div class="reel-player reveal">
+        <iframe src="https://www.youtube.com/embed/qu0MMzgp-6U" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+        <div class="iframe-overlay" data-player="2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-number">02</div>
+    <div class="about-left">
+      <div class="section-label reveal">About Me</div>
+      <h2 class="about-title reveal">TELLING<br>STORIES IN<br><em>MOTION</em></h2>
+      <p class="about-body reveal">
+        I'm a video editor and motion graphics artist with a passion for turning raw footage into cinematic experiences. Whether it's a brand commercial, short film, or social content — I bring visual clarity and emotional rhythm to every cut.
+      </p>
+      <p class="about-body reveal">
+        Based in Hyderabad. Open to remote collaborations worldwide.
+      </p>
+
+      <div class="skills-grid reveal">
+        <div class="skill-tag">Adobe Premiere Pro</div>
+        <div class="skill-tag">After Effects</div>
+        <div class="skill-tag">DaVinci Resolve</div>
+        <div class="skill-tag">Motion Graphics</div>
+        <div class="skill-tag">Color Grading</div>
+        <div class="skill-tag">Sound Design</div>
+        <div class="skill-tag">3D Integration</div>
+        <div class="skill-tag">VFX Compositing</div>
+      </div>
+    </div>
+
+    <div class="about-right reveal">
+      <div class="about-badge">
+        <div class="about-badge-num">10+</div>
+        <div class="about-badge-label">Projects Done</div>
+      </div>
+      <div class="about-img-wrap"></div>
+      <div class="about-img-frame"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <div class="section-label reveal">Contact</div>
+        <h2 class="contact-heading reveal">LET'S<br>CREATE<br><span>SOMETHING</span></h2>
+        <p class="contact-sub reveal">Have a project in mind? Let's talk about it. I'm always open to exciting new collaborations.</p>
+
+        <div class="contact-links reveal">
+          <a href="/cdn-cgi/l/email-protection#7605041f151e171d0417121e1704464536111b171f1a5815191b" class="contact-link">
+            <div>
+              <div class="contact-link-type">Email</div>
+              <div><span class="__cf_email__" data-cfemail="a0d3d2c9c3c8c1cbd2c1c4c8c1d29093e0c7cdc1c9cc8ec3cfcd">[email&#160;protected]</span></div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+          <a href="https://instagram.com/chakramfps" class="contact-link" target="_blank">
+            <div>
+              <div class="contact-link-type">Instagram</div>
+              <div>@chakramfps</div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+          <a href="https://instagram.com/retentio.edit" class="contact-link" target="_blank">
+            <div>
+              <div class="contact-link-type">Instagram</div>
+              <div>@retentio.edit</div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+          <a href="https://linkedin.com/in/yourprofile" class="contact-link" target="_blank">
+            <div>
+              <div class="contact-link-type">LinkedIn</div>
+              <div>linkedin.com/in/yourprofile</div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-side reveal">
+        <div class="form-field">
+          <label>Your Name</label>
+          <input type="text" placeholder="John Doe" />
+        </div>
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" placeholder="john@email.com" />
+        </div>
+        <div class="form-field">
+          <label>Tell me about your project</label>
+          <textarea placeholder="I need a cinematic edit for..."></textarea>
+        </div>
+        <button class="submit-btn" onclick="alert('Message sent! (Connect a backend or Formspree to make this functional)')">
+          Send Message
+          <svg viewBox="0 0 14 14" fill="none" stroke="#080808" stroke-width="1.5">
+            <path d="M1 7H13M7 1L13 7L7 13"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-logo">SRI<span>.</span>CHAKRADHAR</div>
+    <p>© 2025 — All rights reserved</p>
+    <p>Video Editor & Motion Graphics</p>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top = my + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, .play-btn, .skill-tag').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+
+    // Scroll reveal
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Iframe overlay — click to play, keeps cursor alive outside video
+    document.querySelectorAll('.iframe-overlay').forEach(overlay => {
+      overlay.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        overlay.closest('.reel-player').addEventListener('mouseleave', () => {
+          overlay.classList.remove('hidden');
+        }, { once: true });
+      });
+    });
+  </script>
+</body>
+</html>
