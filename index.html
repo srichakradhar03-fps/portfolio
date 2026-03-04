@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio — Video Editor & Motion Graphics</title>
+  <title>Portfolio - Video Editor & Motion Graphics</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -410,9 +410,9 @@
     }
     .social-video {
       width: 100%;
+      height: auto;
       display: block;
       background: #000;
-      max-height: 480px;
     }
 
     /* REEL CATEGORIES */
@@ -836,7 +836,7 @@
     </h1>
 
     <div class="hero-sub">
-      <p>Video editor & motion graphics artist crafting stories that move — one frame at a time.</p>
+      <p>Video editor & motion graphics artist crafting stories that move, one frame at a time.</p>
       <div class="hero-divider"></div>
       <div class="hero-stats">
         <div>
@@ -1037,7 +1037,7 @@
         <span class="reel-category-num">07</span>
         <div>
           <div class="reel-category-title">Personal Journey</div>
-          <div class="reel-category-desc">Behind the edit — my journey on <span style="color:var(--accent)">@retention.edits</span></div>
+          <div class="reel-category-desc">Behind the edit, my journey on <span style="color:var(--accent)">@retention.edits</span></div>
         </div>
       </div>
       <div class="social-videos-list">
@@ -1080,7 +1080,7 @@
       <div class="section-label reveal">About Me</div>
       <h2 class="about-title reveal">TELLING<br>STORIES IN<br><em>MOTION</em></h2>
       <p class="about-body reveal">
-        I'm a video editor and motion graphics artist with a passion for turning raw footage into cinematic experiences. Whether it's a brand commercial, short film, or social content — I bring visual clarity and emotional rhythm to every cut.
+        I'm a video editor and motion graphics artist with a passion for turning raw footage into cinematic experiences. Whether it's a brand commercial, short film, or social content, I bring visual clarity and emotional rhythm to every cut.
       </p>
       <p class="about-body reveal">
         Based in Hyderabad. Open to remote collaborations worldwide.
@@ -1144,34 +1144,36 @@
         </div>
       </div>
 
-      <div class="contact-form-side reveal">
+      <form class="contact-form-side reveal" action="https://formspree.io/f/xqedrlda" method="POST">
         <div class="form-field">
           <label>Your Name</label>
-          <input type="text" id="formName" placeholder="John Doe" />
+          <input type="text" name="name" id="formName" placeholder="John Doe" />
         </div>
         <div class="form-field">
           <label>Email Address</label>
-          <input type="email" id="formEmail" placeholder="john@email.com" />
+          <input type="email" name="email" id="formEmail" placeholder="john@email.com" />
         </div>
         <div class="form-field">
           <label>Tell me about your project</label>
-          <textarea id="formMessage" placeholder="I need a cinematic edit for..."></textarea>
+          <textarea name="message" id="formMessage" placeholder="I need a cinematic edit for..."></textarea>
         </div>
-        <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+        <input type="hidden" name="_next" value="https://srichakradhar03-fps.github.io/S-Sri-chakradhar" />
+        <input type="hidden" name="_subject" value="New message from your portfolio!" />
+        <button type="submit" class="submit-btn">
           Send Message
           <svg viewBox="0 0 14 14" fill="none" stroke="#080808" stroke-width="1.5">
             <path d="M1 7H13M7 1L13 7L7 13"/>
           </svg>
         </button>
         <div id="formStatus" style="margin-top:14px;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;display:none;"></div>
-      </div>
+      </form>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div class="foot-logo">SRI<span>.</span>CHAKRADHAR</div>
-    <p>© 2025 — All rights reserved</p>
+    <p>© 2025 All rights reserved</p>
     <p>Video Editor & Motion Graphics</p>
   </footer>
 
