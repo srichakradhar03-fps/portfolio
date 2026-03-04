@@ -692,6 +692,10 @@
       opacity: 1;
       transform: translateY(0);
     }
+    /* Fallback — if JS doesn't fire, still show content */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; }
+    }
 
     /* Responsive */
     @media (max-width: 900px) {
@@ -825,8 +829,7 @@
           <a href="#" class="contact-link" id="emailLink">
             <div>
               <div class="contact-link-type">Email</div>
-              <div id="emailText"><span class="__cf_email__" data-cfemail="b1c2c3d8d2d9d0dac3d0d5d9d0c38182f1d6dcd0d8dd9fd2dedc">[email&#160;protected]</span></div>
-            </div>
+              <div id="emailText"></div>
             </div>
             <span class="contact-link-arrow">↗</span>
           </a>
@@ -910,8 +913,14 @@
       el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
     });
 
-    // Scroll reveal
+    // Scroll reveal — force visible after short delay as fallback
     const revealEls = document.querySelectorAll('.reveal');
+
+    // Fallback: make everything visible after 1.5s in case observer doesn't fire
+    setTimeout(() => {
+      revealEls.forEach(el => el.classList.add('visible'));
+    }, 1500);
+
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -919,17 +928,27 @@
           observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
 
     revealEls.forEach(el => observer.observe(el));
 
-    // Set email link dynamically to avoid Cloudflare encoding
-    const u = 'srichakradhar03';
-    const d = 'gmail.com';
+    // Set email using char codes so Cloudflare cannot detect or encode it
+    const e = [115,114,105,99,104,97,107,114,97,100,104,97,114,48,51,64,103,109,97,105,108,46,99,111,109];
+    const eStr = e.map(c => String.fromCharCode(c)).join('');
     const emailLink = document.getElementById('emailLink');
-    if (emailLink) emailLink.href = 'mailto:' + u + '@' + d;
+    const emailText = document.getElementById('emailText');
+    if (emailLink) emailLink.href = 'mail' + 'to:' + eStr;
+    if (emailText) emailText.textContent = eStr;
 
     // Iframe overlay — click to play, keeps cursor alive outside video
     document.querySelectorAll('.iframe-overlay').forEach(overlay => {
       overlay.addEventListener('click', () => {
-        overlay.classList.add('h
+        overlay.classList.add('hidden');
+        overlay.closest('.reel-player').addEventListener('mouseleave', () => {
+          overlay.classList.remove('hidden');
+        }, { once: true });
+      });
+    });
+  </script>
+</body>
+</html>
