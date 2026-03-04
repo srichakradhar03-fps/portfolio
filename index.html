@@ -377,6 +377,110 @@
       display: none;
     }
 
+    /* SOCIAL VIDEOS LIST */
+    .social-videos-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .social-video-item {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .social-video-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .social-video-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .social-video-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .social-video {
+      width: 100%;
+      display: block;
+      background: #000;
+      max-height: 480px;
+    }
+
+    /* REEL CATEGORIES */
+    .reel-category {
+      margin-bottom: 64px;
+    }
+    .reel-category-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .reel-category-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(232,201,109,0.3);
+      line-height: 1;
+      min-width: 52px;
+    }
+    .reel-category-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.06em;
+      color: var(--white);
+      line-height: 1;
+    }
+    .reel-category-desc {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-top: 6px;
+    }
+    .reel-placeholder-empty {
+      background: var(--surface);
+      border: 1px dashed rgba(255,255,255,0.08) !important;
+    }
+    .reel-coming-soon {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .reel-coming-icon {
+      font-size: 2rem;
+      color: rgba(232,201,109,0.15);
+    }
+    .reel-coming-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      color: rgba(240,236,228,0.15);
+    }
+    .reel-coming-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.1);
+    }
+
     /* ABOUT */
     .about {
       padding: 120px 52px;
@@ -754,21 +858,219 @@
 
   <!-- SHOWREEL -->
   <section class="showreel" id="showreel">
-    <div class="section-label reveal">Showreel</div>
+    <div class="section-label reveal">Portfolio</div>
     <h2 class="showreel-title reveal">THE REEL</h2>
 
-    <div class="reel-player reveal">
-      <iframe src="https://www.youtube.com/embed/dp7TsixhKaE" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-      <div class="iframe-overlay" data-player="1"></div>
-    </div>
-
-    <div style="margin-top: 24px;">
-      <div class="section-label reveal" style="margin-bottom: 16px;">Showreel 02</div>
-      <div class="reel-player reveal">
-        <iframe src="https://www.youtube.com/embed/qu0MMzgp-6U" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-        <div class="iframe-overlay" data-player="2"></div>
+    <!-- 01 Demo Reel -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">01</span>
+        <div>
+          <div class="reel-category-title">Demo Reel</div>
+          <div class="reel-category-desc">Full showcase of editing & motion work</div>
+        </div>
+      </div>
+      <div class="reel-player reel-placeholder-empty">
+        <div class="reel-coming-soon">
+          <div class="reel-coming-icon">▶</div>
+          <div class="reel-coming-text">Coming Soon</div>
+          <div class="reel-coming-sub">Video will be added here</div>
+        </div>
       </div>
     </div>
+
+    <!-- 02 Web Banners -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">02</span>
+        <div>
+          <div class="reel-category-title">Web Banners</div>
+          <div class="reel-category-desc">Animated banners & digital ad creatives</div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">01</span>
+            <span class="social-video-title">Web Banner</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="web_banner.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Brand Awareness -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">03</span>
+        <div>
+          <div class="reel-category-title">Brand Awareness</div>
+          <div class="reel-category-desc">Storytelling edits that build brand identity</div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">01</span>
+            <span class="social-video-title">Brand Awareness</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="brand_awareness.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">02</span>
+            <span class="social-video-title">Custom Printing</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="custom_printing.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Product Promo -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">04</span>
+        <div>
+          <div class="reel-category-title">Product Promo</div>
+          <div class="reel-category-desc">High-impact product reveal & promo videos</div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">01</span>
+            <span class="social-video-title">Product Promo 01</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="producr_promo.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">02</span>
+            <span class="social-video-title">Product Promo 02</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="product_promo_2.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Overlays & Motion -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">05</span>
+        <div>
+          <div class="reel-category-title">Overlays & Motion</div>
+          <div class="reel-category-desc">Motion overlays, transitions & VFX elements</div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">01</span>
+            <span class="social-video-title">AMD Overlay</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="amd_overlay.webm" type="video/webm">
+          </video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">02</span>
+            <span class="social-video-title">Motion Poster</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="motion_poster.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 Daily Posting Content -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">06</span>
+        <div>
+          <div class="reel-category-title">Daily Posting Content</div>
+          <div class="reel-category-desc">Reels, shorts & consistent social content</div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">01</span><span class="social-video-title">Social Cut 01</span></div>
+          <video controls preload="none" class="social-video"><source src="social1.mp4" type="video/mp4"></video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">02</span><span class="social-video-title">Social Cut 02</span></div>
+          <video controls preload="none" class="social-video"><source src="social2.mp4" type="video/mp4"></video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">03</span><span class="social-video-title">Social Cut 03</span></div>
+          <video controls preload="none" class="social-video"><source src="social3.mp4" type="video/mp4"></video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">04</span><span class="social-video-title">Social Cut 04</span></div>
+          <video controls preload="none" class="social-video"><source src="social4.mp4" type="video/mp4"></video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">05</span><span class="social-video-title">Social Cut 05</span></div>
+          <video controls preload="none" class="social-video"><source src="social5.mp4" type="video/mp4"></video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label"><span class="social-video-num">06</span><span class="social-video-title">Social Cut 06</span></div>
+          <video controls preload="none" class="social-video"><source src="social6.mp4" type="video/mp4"></video>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 Personal Journey — @retention.edits -->
+    <div class="reel-category reveal">
+      <div class="reel-category-header">
+        <span class="reel-category-num">07</span>
+        <div>
+          <div class="reel-category-title">Personal Journey</div>
+          <div class="reel-category-desc">Behind the edit — my journey on <span style="color:var(--accent)">@retention.edits</span></div>
+        </div>
+      </div>
+      <div class="social-videos-list">
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">01</span>
+            <span class="social-video-title">Mistakes of the Journey</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="mistakes_of_journey.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">02</span>
+            <span class="social-video-title">Proof of Learning</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="proof_of_learning.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="social-video-item">
+          <div class="social-video-label">
+            <span class="social-video-num">03</span>
+            <span class="social-video-title">Intro of Leo</span>
+          </div>
+          <video controls preload="none" class="social-video">
+            <source src="Into_Of_Leo.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <!-- ABOUT -->
