@@ -586,8 +586,8 @@
     .about-img-wrap {
       position: relative;
       aspect-ratio: 3/4;
-      background: var(--surface);
-      border: 1px solid var(--border);
+      background: transparent;
+      border: none;
       overflow: hidden;
       max-height: 500px;
       justify-self: center;
@@ -603,7 +603,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(160deg, rgba(196,75,43,0.08), rgba(232,201,109,0.05));
+      background: transparent;
     }
     .about-img-frame {
       position: absolute;
@@ -859,7 +859,7 @@
       .hero { padding: 0 20px 56px; }
       .hero-frame { inset: 10px; }
       .hero-title { max-width: 100%; font-size: clamp(2.5rem, 12vw, 5rem); }
-      .hero-video-bg { opacity: 0.12; object-fit: cover; object-position: center center; }
+      .hero-video-bg { opacity: 0.12; object-fit: contain; object-position: center center; }
       .hero-sub p { font-size: 0.82rem; }
       .showreel, .about, .contact { padding: 60px 20px; }
       .about { grid-template-columns: 1fr; gap: 32px; }
@@ -1193,9 +1193,7 @@
 
     <div class="about-right reveal">
       <div class="about-img-wrap">
-        <img src="photo.png" alt="S Sri Chakradhar" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:75% 15%;display:block;" />
-        <div style="position:absolute;inset:0;background:linear-gradient(to right, rgba(8,8,8,0.6) 0%, transparent 40%, transparent 100%);pointer-events:none;"></div>
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom, transparent 60%, rgba(8,8,8,0.4) 100%);pointer-events:none;"></div>
+        <img src="photo.png" alt="S Sri Chakradhar" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:70% top;display:block;mix-blend-mode:lighten;" />
       </div>
       <div class="about-img-frame"></div>
     </div>
