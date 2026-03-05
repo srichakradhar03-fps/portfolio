@@ -588,7 +588,7 @@
       aspect-ratio: 3/4;
       background: transparent;
       border: none;
-      overflow: hidden;
+      overflow: visible;
       max-height: 500px;
       justify-self: center;
       width: 75%;
@@ -607,9 +607,9 @@
     }
     .about-img-frame {
       position: absolute;
-      top: 20px; left: 20px;
-      right: 0; bottom: 0;
-      border: 1px solid rgba(232,201,109,0.3);
+      top: 24px; left: 24px;
+      bottom: -24px; right: -24px;
+      border: 1px solid rgba(232,201,109,0.35);
       pointer-events: none;
       z-index: 0;
     }
